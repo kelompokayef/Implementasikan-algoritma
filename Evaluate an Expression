@@ -143,3 +143,75 @@ string ITP(string input){
         }
         return P;
 }
+
+
+
+int pow(int number, int exp){
+        for(int i=1; i<exp; i++)
+                number *= number;
+        return number;
+}
+
+bool Operand(char input){
+        int c = (int)input;
+        if(c >= 48 && c <= 57)
+                return true;
+        else if(c >= 65 && c <= 90 || c >= 97 && c <= 122){
+                cout << "\nNot Evaluated" << endl;
+                cin.get();
+                exit(0);
+        }
+        else
+                return false;
+}
+
+double Operation(int op1, char c, int op2){
+        if(c == '^')
+                return (pow(op1,op2));
+        else if(c == '*')
+                return (op1 * op2);
+        else if(c == '/')
+                return (op1 / op2);
+        else if(c == '+')
+                return (op1 + op2);
+        else if(c == '-')
+                return (op1 - op2);
+        else return 0;
+}
+
+int Evaluate(string input){
+        int i = 0;
+        while(input[i] != '\0'){
+                if(Operand(input[i])){
+                        int operand = 0;
+                        while(input[i] != '\0' && Operand(input[i])){
+                                operand = (operand * 10) + (input[i] - 48);
+                                i++;
+                        }
+                        SE.push(operand);
+                }
+                if(isOperator(input[i])){
+                        int A = SE.Top(); SE.pop();
+                        int B = SE.Top(); SE.pop();
+                        int result = Operation(B,input[i],A);
+                        SE.push(result);
+                }
+                i++;
+        }
+        return SE.Top();
+}
+int main(){
+
+        cout<<"||                                               EVALUATE AN EXPRESSION                                        ||"<<endl;
+        cout<<"||                                         DEVELOPED BY Amara, Yasmin, Elshinta                                ||"<<endl;
+        cout<<"||My Github = https://github.com/kelompokayef/Implementasikan-algoritma/blob/master/Evaluate%20an%20Expression ||"<<endl<<endl;
+        string I;
+        cout<<"||Enter Infix Expression = ";
+        getline(cin,I);
+        string P = ITP(I);
+        cout<<"\n||Infix Your Enter = "<< I;
+        cout<<"\n||Postfix of Infix = "<< P;
+        int result = Evaluate(P);
+        cout<<"\n||Evaluate Expression = "<< result;
+        return 0;
+}
